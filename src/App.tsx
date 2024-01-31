@@ -7,6 +7,7 @@ import Button from './components/Button.tsx';
 function App() {
   const customForm = useRef<FormHandle>(null);
 
+  // Type Casting
   function handleSave(data: unknown) {
     const extractedData = data as {
       name: string;
@@ -15,6 +16,20 @@ function App() {
     console.log(extractedData);
     customForm.current?.clear();
   }
+
+  // Using Type Guard instead of Type Casting
+  // function handleSave(data: unknown) {
+  //   if (
+  //     !data ||
+  //     typeof data !== 'object' ||
+  //     !('name' in data) ||
+  //     !('age' in data)
+  //   ) {
+  //     return;
+  //   }
+  //   console.log(data);
+  //   customForm.current?.clear();
+  // }
 
   return (
     <main>
