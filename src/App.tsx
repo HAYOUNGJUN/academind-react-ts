@@ -20,8 +20,6 @@ const rawDataBlogPostSchema = z.object({
   body: z.string(),
 });
 
-const expectedResponseDataSchema = z.array(rawDataBlogPostSchema);
-
 function App() {
   const [fetchedPosts, setFetchedPosts] = useState<BlogPost[]>();
   const [error, setError] = useState<Error>();
@@ -29,25 +27,23 @@ function App() {
 
   useEffect(() => {
     async function fetchPosts() {
-      try {
-        const data = await get('https://jsonplaceholder.typicode.com/posts');
-        const parsedData = expectedResponseDataSchema.parse(data);
+      setIsFetching(true);
 
-        const blogPosts: BlogPost[] = parsedData.map((rawPost) => {
-          return {
-            id: rawPost.id,
-            title: rawPost.title,
-            text: rawPost.body,
-          };
-        });
+      const data = await get(
+        'https://jsonplaceholder.typicode.com/posts',
+        z.array(rawDataBlogPostSchema)
+      );
 
-        setFetchedPosts(blogPosts);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        }
-        setError('Failed to fetch posts!');
-      }
+      const blogPosts: BlogPost[] = data.map((rawPost) => {
+        return {
+          id: rawPost.id,
+          title: rawPost.title,
+          text: rawPost.body,
+        };
+      });
+
+      setFetchedPosts(blogPosts);
+
       setIsFetching(false);
     }
 
@@ -55,6 +51,10 @@ function App() {
   }, []);
 
   let content: ReactNode;
+
+  if (isFetching) {
+    content = <p>Now is loading...</p>;
+  }
 
   if (fetchedPosts) {
     content = <BlogPosts posts={fetchedPosts} />;
