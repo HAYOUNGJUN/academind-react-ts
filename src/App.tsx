@@ -5,13 +5,14 @@ import { z } from 'zod';
 import BlogPosts, { BlogPost } from './components/BlogPosts.tsx';
 import { get } from './util/http.ts';
 import fetchingImg from './assets/data-fetching.png';
+import ErrorMessage from './components/ErrorMessage.tsx';
 
-// type RawDataBlogPost = {
-//   id: number;
-//   userId: number;
-//   title: string;
-//   body: string;
-// };
+type RawDataBlogPost = {
+  id: number;
+  userId: number;
+  title: string;
+  body: string;
+};
 
 const rawDataBlogPostSchema = z.object({
   id: z.number(),
@@ -20,29 +21,38 @@ const rawDataBlogPostSchema = z.object({
   body: z.string(),
 });
 
+// const expectedResponseDataSchema = z.array(rawDataBlogPostSchema);
+
 function App() {
   const [fetchedPosts, setFetchedPosts] = useState<BlogPost[]>();
-  const [error, setError] = useState<Error>();
-  const [isFetching, setIsFetching] = useState<boolean>();
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     async function fetchPosts() {
       setIsFetching(true);
 
-      const data = await get(
-        'https://jsonplaceholder.typicode.com/posts',
-        z.array(rawDataBlogPostSchema)
-      );
+      try {
+        const data = await get<RawDataBlogPost[]>(
+          'https://jsonplaceholder.typicode.com/posts',
+          z.array(rawDataBlogPostSchema)
+        );
+        // const parsedData = expectedResponseDataSchema.parse(data);
+        const blogPosts: BlogPost[] = data.map((rawPost) => {
+          return {
+            id: rawPost.id,
+            title: rawPost.title,
+            text: rawPost.body,
+          };
+        });
 
-      const blogPosts: BlogPost[] = data.map((rawPost) => {
-        return {
-          id: rawPost.id,
-          title: rawPost.title,
-          text: rawPost.body,
-        };
-      });
-
-      setFetchedPosts(blogPosts);
+        setFetchedPosts(blogPosts);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        }
+        // setError('Failed to fetch posts!');
+      }
 
       setIsFetching(false);
     }
@@ -52,12 +62,16 @@ function App() {
 
   let content: ReactNode;
 
-  if (isFetching) {
-    content = <p>Now is loading...</p>;
+  if (error) {
+    content = <ErrorMessage text={error} />;
   }
 
   if (fetchedPosts) {
     content = <BlogPosts posts={fetchedPosts} />;
+  }
+
+  if (isFetching) {
+    content = <p id='loading-fallback'>Fetching post...</p>;
   }
 
   return (

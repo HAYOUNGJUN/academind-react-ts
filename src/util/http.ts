@@ -14,6 +14,5 @@ export async function get<T>(url: string, zodSchema: z.ZodType<T>) {
   } catch (error) {
     throw new Error('Invalid data received from server.');
   }
-
   // return data as T;
 }
