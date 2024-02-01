@@ -4,10 +4,10 @@ import certificateImg from '../assets/certificate.jpg';
 
 export default function HomePage() {
   return (
-    <main id="home-page">
+    <main id='home-page'>
       <h2>Our Mission: Your Success</h2>
       <section>
-        <img src={studentsImg} alt="A group of students" />
+        <img src={studentsImg} alt='A group of students' />
         <div>
           <h3>What we do</h3>
           <p>
@@ -20,7 +20,7 @@ export default function HomePage() {
       </section>
 
       <section>
-        <img src={listImg} alt="A list of sessions" />
+        <img src={listImg} alt='A list of sessions' />
         <div>
           <h3>What we offer</h3>
           <p>
@@ -31,7 +31,7 @@ export default function HomePage() {
         </div>
       </section>
       <section>
-        <img src={certificateImg} alt="A certificate" />
+        <img src={certificateImg} alt='A certificate' />
         <div>
           <h3>What you get</h3>
           <p>
