@@ -1,8 +1,8 @@
 import SessionItem, { type SessionItemProps } from './SessionItem';
 
-type SessionItemListProps = { sessions: SessionItemProps[] };
+type SessionsListProps = { sessions: SessionItemProps[] };
 
-export default function SessionsList({ sessions }: SessionItemListProps) {
+export default function SessionsList({ sessions }: SessionsListProps) {
   return (
     <ul id='sessions-list'>
       {sessions.map((session) => (
