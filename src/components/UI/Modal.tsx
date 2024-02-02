@@ -1,7 +1,7 @@
 import { type ReactNode, useRef, forwardRef, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
 
-type ModalHandle = {
+export type ModalHandle = {
   open: () => void;
 };
 

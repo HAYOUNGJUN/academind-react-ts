@@ -21,9 +21,9 @@ export default function SessionItem({
           <h3>{title}</h3>
           <p>{summary}</p>
         </div>
-        <div className='actions'>
+        <p className='actions'>
           <Button to={id}>Learn More</Button>
-        </div>
+        </p>
       </div>
     </article>
   );
