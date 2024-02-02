@@ -28,7 +28,9 @@ export default function UpcomingSession({
         </time>
       </div>
       <p className='actions'>
-        <Button onClick={onCancel}>Cancel</Button>
+        <Button onClick={onCancel} textOnly>
+          Cancel
+        </Button>
       </p>
     </article>
   );
