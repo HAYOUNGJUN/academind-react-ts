@@ -3,7 +3,9 @@ import { FormEvent, useEffect, useRef } from 'react';
 import Modal, { ModalHandle } from '../UI/Modal.tsx';
 import Input from '../UI/Input.tsx';
 import Button from '../UI/Button.tsx';
-import { Session, useSessionsContext } from '../../store/sessions-context.tsx';
+// import { Session, useSessionsContext } from '../../store/sessions-context.tsx';
+import { type Session, bookSession } from '../../store/session-slice.ts';
+import { useSessionDispatch } from '../../store/hooks.ts';
 
 type BookSessionProps = {
   session: Session;
@@ -12,7 +14,8 @@ type BookSessionProps = {
 
 export default function BookSession({ session, onDone }: BookSessionProps) {
   const modal = useRef<ModalHandle>(null);
-  const sessionsCtx = useSessionsContext();
+  // const sessionsCtx = useSessionsContext();
+  const dispatch = useSessionDispatch();
 
   useEffect(() => {
     if (modal.current) {
@@ -26,7 +29,8 @@ export default function BookSession({ session, onDone }: BookSessionProps) {
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
     console.log(data);
-    sessionsCtx.bookSession(session);
+    // sessionsCtx.bookSession(session);
+    dispatch(bookSession(session));
     onDone();
   }
 
