@@ -1,4 +1,4 @@
-import { FormEvent, useRef } from 'react';
+import { FormEvent, useEffect, useRef } from 'react';
 
 import Modal, { ModalHandle } from '../UI/Modal.tsx';
 import Input from '../UI/Input.tsx';
@@ -13,6 +13,12 @@ type BookSessionProps = {
 export default function BookSession({ session, onDone }: BookSessionProps) {
   const modal = useRef<ModalHandle>(null);
   const sessionsCtx = useSessionsContext();
+
+  useEffect(() => {
+    if (modal.current) {
+      modal.current.open();
+    }
+  }, []);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -30,7 +36,7 @@ export default function BookSession({ session, onDone }: BookSessionProps) {
       <form onSubmit={handleSubmit}>
         <Input label='Your name' type='text' id='name' />
         <Input label='Your email' type='email' id='email' />
-        <p>
+        <p className='actions'>
           <Button type='button' textOnly onClick={onDone}>
             Cancel
           </Button>
