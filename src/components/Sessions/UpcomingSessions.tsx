@@ -21,6 +21,10 @@ export default function UpcomingSessions({ onClose }: UpcomingSessionsProps) {
     }
   }, []);
 
+  function handleCancelSession(sessionId: string) {
+    sessionsCtx.cancelSession(sessionId);
+  }
+
   return (
     <Modal ref={modal} onClose={onClose}>
       <h2>Upcoming Sessions</h2>
@@ -28,7 +32,10 @@ export default function UpcomingSessions({ onClose }: UpcomingSessionsProps) {
         <ul>
           {sessionsCtx.upcomingSessions.map((session) => (
             <li key={session.id}>
-              <UpcomingSession />
+              <UpcomingSession
+                session={session}
+                onCancel={() => handleCancelSession(session.id)}
+              />
             </li>
           ))}
         </ul>
